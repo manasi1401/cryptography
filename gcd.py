@@ -10,7 +10,6 @@ def gcd(x, y):
 
     return x
 
-print(gcd(48, 60))
 
 # ax + by = c
 def extendedgcd( a, b):
@@ -22,8 +21,6 @@ def extendedgcd( a, b):
         return g, y, x - (a//b)*y
 
 
-print(extendedgcd(26, 15))
-
 def findModInverse(a, n):
     g, x, y = extendedgcd(a, n)
 
@@ -32,6 +29,4 @@ def findModInverse(a, n):
     else:
         return x % n
 
-print(findModInverse(3, 11))
-print(findModInverse(10, 17))
 
