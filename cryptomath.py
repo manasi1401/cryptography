@@ -57,7 +57,7 @@ def is_prime(n):
 
     d = n - 1
     while d % 2 == 0:
-        d = d/2
+        d = d/2.0
     for i in range(3):
         if computeMiller(int(d), n) is False:
             return False
@@ -88,6 +88,17 @@ def all_primes(n):
             primes.append(i)
 
     return primes
+
+
+def random_prime(b):
+    s = 2**b-1
+    e = 2**(b+1) -1
+
+    randNum = random.randint(s, e)
+    while is_prime(randNum) is False:
+        randNum = random.randint(s, e)
+
+    return randNum
 
 
 
