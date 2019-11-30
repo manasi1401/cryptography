@@ -1,5 +1,5 @@
 from math import *
-from gcd import *
+from cryptomath import *
 # [A..Z]
 N = 26
 
