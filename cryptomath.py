@@ -41,6 +41,7 @@ def powerModulus(a, d, n):
         a = (a*a) % n
     return r
 
+
 def is_prime(n):
     """
     Miller Rabin primality test
@@ -101,5 +102,74 @@ def random_prime(b):
     return randNum
 
 
+def pollard_rho(n):
+
+    if (n == 1): # if no prime divisors for 1
+        return n
+
+    if n % 2 == 0:
+        return 2
+
+    x = random.randint(2, n) # range of divisors from 2 to N
+    y = x
+    c = random.randint(1, n)
+
+    d = 1 # divisor
+    # f(x) = (x^2 +c) mod n
+    while d == 1:
+        x = ((x*x) % n + c) % n
+        y = ((y*y) % n + c) % n
+        y = ((y*y) % n + c) % n
+        d = gcd(abs(x-y), n)
+    if d == n: # no factor found
+        return n
+    return d
 
 
+def fermats_method(n):
+    if is_prime(n):
+        return n
+    a = ceil(sqrt(n))
+    b2 = a*a - n
+    while (int(sqrt(b2)))**2 != b2:
+        a = a + 1
+        b2 = a*a - n
+    return int(a - sqrt(b2))
+
+
+def pollard_p_1(n): # needs to be worked on
+    b1 = 100
+    a = 2
+    for i in range(b1):
+        a = powerModulus(a, i, n)
+        g = gcd(a - 1, n)
+        if 1 < g < n:
+            return g
+    return n
+
+
+def compute_sqr_root(a,n):
+    # p = 3 mod 4
+    if n % 4 != 3:
+        return 0
+
+    # make sure a < n
+    a = a % n
+    # x = y ^ (p+1)/4 mod n
+    x = powerModulus(a, int((n+1)/4), n)
+    if (x*x) % n == a:
+        return x
+    # if y has no roots then -y has roots
+    x = n - x
+    if (x*x) % n == a:
+        return x
+
+    return 0
+
+
+def modular_sqr_root(a, n):
+
+    if is_prime(n):
+        x = compute_sqr_root(a, n)
+        return x, n - x
+    # if n can be factored
