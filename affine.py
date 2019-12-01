@@ -1,5 +1,6 @@
 from math import *
 from cryptomath import *
+from frequency import *
 # [A..Z]
 N = 26
 
@@ -44,7 +45,43 @@ def decrypt(a, b, ct, n):
     a_inv = findModInverse(a, n)
     decipherd = ""
     for c in ct:
-        pi = (a_inv*((ord(c) - 65) - b)) % n
+        pi = (a_inv*((ord(c)- 65) - b)) % n
         decipherd += str(chr(pi + 65))
     return decipherd
+
+
+def attack_affine(e, t, n):
+    e_cipher = ord(e) - 65
+    t_cipher = ord(t) - 65
+    # a (4) + b = e_cipher
+    # a(19) + b = t_cipher
+    # a = (e-cipher - t_cipher)/(-15)
+    a = (e_cipher - t_cipher)/(-15.0)
+    a = int(a) % n
+    while a < 0:
+        a += n
+    b = (e_cipher - 4*a)%n
+    return a, b
+
+def brute_force(cipher, n):
+    possible_a = []
+    possible_b = range(1, n)
+    for i in range(1, n):
+        if gcd(i,n)==1:
+            possible_a.append(i)
+    for i in possible_a:
+        for j in possible_b:
+            print(decrypt(i, j, cipher, n))
+
+a, b = get_ab()
+pt = get_plaintext()
+xi = encrypt(a, b, pt, 26)
+pi = decrypt(a, b, xi, 26)
+#freq = analyze(xi)
+#e, t = print_analysis(freq)
+#a1, b1 = attack_affine(e, t, 26)
+#attck = decrypt(a1, b1, xi, 26)
+#brute_force(xi, 26)
+print(xi)
+print(pi)
 

@@ -1,4 +1,5 @@
 from math import *
+from frequency import *
 
 
 def get_string():
@@ -35,6 +36,6 @@ str = get_string()
 key = get_key()
 cipher = vigenere_encode(str, key)
 decipher = vigenere_decode(cipher, key)
-
+frequency = analyze(cipher)
 print(cipher)
 print(decipher)

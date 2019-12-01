@@ -30,9 +30,10 @@ def print_analysis(freq):
     sortedFreq = np.argsort(freq)
     print("Max #1 : ", chr(sortedFreq[-1] + 65), " ", freq[sortedFreq[-1]])
     print("Max #2 : ", chr(sortedFreq[-2] + 65), " ", freq[sortedFreq[-2]])
-    return freq[sortedFreq[-1]], freq[sortedFreq[-2]], freq[sortedFreq[-3]]
+    return chr(sortedFreq[-1] + 65), chr(sortedFreq[-2] + 65)
+    # return freq[sortedFreq[-1]], freq[sortedFreq[-2]], freq[sortedFreq[-3]]
 
 
-text = get_text()
-freq = analyze(text)
-print_analysis(freq)
+#text = get_text()
+#freq = analyze(text)
+#print_analysis(freq)
