@@ -24,7 +24,7 @@ def generate_keypair():
     return e, n, d
 
 
-def encrypt(publicK, plaintext):
+def encrypt_rsa(publicK, plaintext):
     e, n = publicK
     # make it uppercase
     plaintext = plaintext.upper()
@@ -35,9 +35,8 @@ def encrypt(publicK, plaintext):
     return cipher
 
 
-def decrypt(privateK, cipher):
+def decrypt_rsa(privateK, cipher):
     d, n = privateK
-
     plain = ""
     for ch in cipher:
         c = powerModulus(ch, d, n)
@@ -45,7 +44,7 @@ def decrypt(privateK, cipher):
 
     return plain
 
-e, n, d = generate_keypair()
-print(e, n, d)
-cipher = encrypt([e, n], "Jonnyhadal i8ttleemap")
-print(decrypt([d, n], cipher))
+# e, n, d = generate_keypair()
+# print(e, n, d)
+# cipher = encrypt([e, n], "Jonnyhadal i8ttleemap")
+# print(decrypt([d, n], cipher))
