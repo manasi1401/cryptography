@@ -90,10 +90,15 @@ def encrypt_des(plain_text, key):
     right = perm_bits[-4:]
     keyOne, keyTwo = generateKeys(key)
 
+    # Round 1
     st1L, st1R = feistal(left, right, keyOne)
+    # Round 2
     st2L, st2R = feistal(st1L, st1R, keyTwo)
+    # Round 3
     st3L, st3R = feistal(st2L, st2R, keyOne)
+    # Round 4
     st4L, st4R = feistal(st3L, st3R, keyTwo)
+
     cipher = permute(st4R+st4L, in_perm)
     return int(cipher, 2)
 
@@ -105,10 +110,15 @@ def decyrpt_des(cipher, key):
     right = perm_bits[-4:]
     keyOne, keyTwo = generateKeys(key)
 
+    # Round 1
     st1L, st1R = feistal(left, right, keyTwo)
+    # Round 2
     st2L, st2R = feistal(st1L, st1R, keyOne)
+    # Round 3
     st3L, st3R = feistal(st2L, st2R, keyTwo)
+    # Round 4
     st4L, st4R = feistal(st3L, st3R, keyOne)
+
     plainText = permute(st4R + st4L, in_perm)
     return int(plainText,2)
 
@@ -147,12 +157,126 @@ def decryptText(c, key):
         pt += chr(i)
     return pt
 
-# e = encrypt(255, 642)
-# d = decyrpt(e, 642)
-# print ("encrypted", e)
-# print("decrypted", d)
-#
-# e = encryptText("sdf", 222)
-# d = decryptText(e, 222)
-# print(e)
-# print(d)
+
+def get_round_14(bits, key):
+    left = bits[:4]
+    right = bits[-4:]
+    keyOne, keyTwo = generateKeys(key)
+
+    # Round 1
+    #st1L, st1R = feistal(left, right, keyOne)
+    # Round 2
+    st2L, st2R = feistal(left, right, keyTwo)
+    # Round 3
+    st3L, st3R = feistal(st2L, st2R, keyOne)
+    # Round 4
+    st4L, st4R = feistal(st3L, st3R, keyTwo)
+
+    return left, right, st4L, st4R
+
+
+def differential_cryptanalysis3(first, first_star, key, count):
+    print(generateKeys(key))
+
+    l1,r1,l4,r4 = get_round_14(first, key)
+    l1_star, r1_star, l4_star, r4_star = get_round_14(first_star, key)
+    l1_diff = xor(l1, l1_star)
+    r1_diff = xor(r1, r1_star)
+    l4_diff = xor(l4, l4_star)
+    r4_diff = xor(r4, r4_star) # = l1' xor f(r3, k2) xor (r3*,k2)
+    # r3 = l4 and r3*= l4*
+
+    # E(l4 xor l4*) = E(l4')
+    expand_l4_diff = permute(l4_diff, epTable)
+    s1_input = expand_l4_diff[:4]
+    s2_input = expand_l4_diff[-4:]
+    # r4' xor l1'
+    r4_d_xor_l1_d = xor(r4_diff, l1_diff)
+    s1_output = r4_d_xor_l1_d[:2]
+    s2_output = r4_d_xor_l1_d[-2:]
+
+    el4 = permute(l4, epTable)
+    el4_left = el4[:4]
+    el4_right = el4[-4:]
+    el4_star = permute(l4_star, epTable)
+    # find pairs s1
+    for i in range(0, 16):
+        for j in range(0, 16):
+            x = get_bin(i, 4)
+            y = get_bin(j, 4)
+            if xor(x, y) == s1_input:
+                s1_x = look_up_stable(x, s1)
+                s1_y = look_up_stable(y, s1)
+                if xor(s1_x, s1_y) == s1_output:
+                    pairs_s1.append(xor(x, el4_left))
+
+
+    # find pairs s2
+    for i in range(0, 16):
+        for j in range(0, 16):
+            x = get_bin(i, 4)
+            y = get_bin(j, 4)
+            if xor(x, y) == s2_input:
+                s2_x = look_up_stable(x, s2)
+                s2_y = look_up_stable(y, s2)
+                if xor(s2_x, s2_y) == s2_output:
+                    pairs_s2.append(xor(y, el4_right))
+
+
+
+
+e = encrypt_des(255, 642)
+d = decyrpt_des(e, 642)
+print ("encrypted", e)
+print("decrypted", d)
+
+e = encryptText("sdf", 222)
+d = decryptText(e, 222)
+print(e)
+print(d)
+first ="10001010"
+first_star ="10101010"
+key = 100
+pairs_s1 =[]
+pairs_s2 =[]
+key_left = []
+key_right = []
+differential_cryptanalysis3(first, first_star, key, 0)
+first ="11001011"
+first_star ="10101011"
+differential_cryptanalysis3(first, first_star, key, 1)
+first ="10111011"
+first_star ="10101011"
+differential_cryptanalysis3(first, first_star, key, 2)
+first ="11001011"
+first_star ="11101011"
+differential_cryptanalysis3(first, first_star, key, 2)
+first ="10001011"
+first_star ="10111011"
+differential_cryptanalysis3(first, first_star, key, 2)
+first ="00001011"
+first_star ="11111011"
+differential_cryptanalysis3(first, first_star, key, 2)
+print(pairs_s1)
+print(pairs_s2)
+
+counterLeft = {}
+counterRight = {}
+for a in pairs_s1:
+    if a in counterLeft:
+        counterLeft[a] += 1
+    else:
+        counterLeft[a] = 1
+
+
+for a in pairs_s2:
+    if a in counterRight:
+        counterRight[a] += 1
+    else:
+        counterRight[a] = 1
+print(get_bin(key,8))
+print(counterLeft)
+print(counterRight)
+
+
+

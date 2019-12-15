@@ -3,6 +3,12 @@ import random
 
 
 def gcd(x, y):
+    """
+    Calculate greatest common divisor between two numbers
+    :param x: first number
+    :param y: second number
+    :return: gcd(x,y)
+    """
     if x < y:
         gcd(y, x)
 
@@ -14,7 +20,12 @@ def gcd(x, y):
 
 # ax + by = c
 def extendedgcd( a, b):
-
+    """
+    Calculated GCD using extended eucledian method
+    :param a: first number
+    :param b: second number
+    :return: egcd(a,b)
+    """
     if b == 0:
         return a, 1, 0
     else:
@@ -137,15 +148,29 @@ def fermats_method(n):
     return int(a - sqrt(b2))
 
 
-def pollard_p_1(n): # needs to be worked on
-    b1 = 100
-    a = 2
-    for i in range(b1):
-        a = powerModulus(a, i, n)
-        g = gcd(a - 1, n)
-        if 1 < g < n:
+def pollard_p_1(n):
+    b1 = 10
+    b2 = int(pow(10, 6))
+    g = 1
+    primes = all_primes(b2)
+    while b1 <= b2:
+        a = random.randint(2, n)%(n-3)
+        g = gcd(a, n)
+        if 1 < g:
             return g
-    return n
+
+        for p in primes:
+            if p < b1:
+                power = 1
+                while p*power <= b1:
+                    power *= p
+                a = powerModulus(a, power, n)
+                g = gcd(a - 1, n)
+                if 1 < g < n:
+                    return g
+        b1 = b1*2
+
+    return 1
 
 
 def compute_sqr_root(a,n):
