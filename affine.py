@@ -1,3 +1,15 @@
+#################################################
+# Author: Manasi Paste
+# Course: Cryptography
+# Professor: Dr. Karlsson
+#
+# Description: This program demonstrates encryption
+# and decryption using Affine cipher. It also demonstrates
+# attack on Affine by using brute force.
+# Requirements: Numpy, Math and Matplotlib library
+#
+# Run instructions: python affine.py
+#################################################
 from math import *
 from cryptomath import *
 from frequency import *

@@ -1,3 +1,14 @@
+#################################################
+# Author: Manasi Paste
+# Course: Cryptography
+# Professor: Dr. Karlsson
+#
+# Description: This program demonstrates, Key Generation, encryption
+# and decryption using RSA cipher
+# Requirements: Numpy, Math and Matplotlib library
+#
+# Run instructions: python rsa.py
+#################################################
 from cryptomath import *
 import random
 
@@ -66,9 +77,11 @@ def decrypt_rsa(privateK, cipher):
 
 def main():
     e, n, d = generate_keypair()
-    print(e, n, d)
-    cipher = encrypt([e, n], "Jonnyhadal i8ttleemap")
-    print(decrypt([d, n], cipher))
+    print("e: ", e, "n: ",n, "d: ", d)
+    message = input("Enter a message: ")
+    cipher = encrypt_rsa([e, n], message)
+    print("Cipher: ", cipher)
+    print("Decrypted Message: ", decrypt_rsa([d, n], cipher))
 
 if __name__== "__main__":
   main()

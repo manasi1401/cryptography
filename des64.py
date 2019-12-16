@@ -1,3 +1,13 @@
+#################################################
+# Author: Manasi Paste
+# Course: Cryptography
+# Professor: Dr. Karlsson
+#
+# Description: This program demonstrates encryption
+# and decryption using 64 bit DES block cipher.
+#
+# Run instructions: python des64.py
+#################################################
 # Permutation Tables from the Cryptography Table
 IP = [58, 50, 42, 34, 26, 18, 10, 2, 60, 52, 44, 36, 28, 20, 12, 4,
       62, 54, 46, 38, 30, 22, 14, 6, 64, 56, 48, 40, 32, 24, 16, 8,
@@ -264,6 +274,18 @@ def main():
     print("Generated Keys: ", KEYS)
     cipher = encrypt(int(message, 16))
     print("Cipher: ",cipher)
+    decryptedM = decrypt(int(cipher, 16))
+    print("Decrypted Message: ", decryptedM)
+    print("Enter your Values now to test: ")
+    KEYS.clear()
+    key = input("Key in hex: ")
+    message = input("Message in hex: ")
+    print("Key: ", key)
+    print("Message: ", message)
+    generate_keys(int(key, 16))
+    print("Generated Keys: ", KEYS)
+    cipher = encrypt(int(message, 16))
+    print("Cipher: ", cipher)
     decryptedM = decrypt(int(cipher, 16))
     print("Decrypted Message: ", decryptedM)
 

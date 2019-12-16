@@ -1,3 +1,13 @@
+#################################################
+# Author: Manasi Paste
+# Course: Cryptography
+# Professor: Dr. Karlsson
+#
+# Description: This program lets user test and
+# interact with all the functions in the cryptomath library
+#
+# Run instructions: python basictest.py
+#################################################
 from cryptomath import *
 
 

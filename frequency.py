@@ -1,3 +1,15 @@
+#################################################
+# Author: Manasi Paste
+# Course: Cryptography
+# Professor: Dr. Karlsson
+#
+# Description: This program reads in a file and analyzes
+# frequency of all English Alphabets. Its also prints the
+# two highest frequencies.
+# Requirements: Numpy
+#
+# Run instructions: python frequency.py
+#################################################
 import numpy as np
 
 

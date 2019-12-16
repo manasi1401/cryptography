@@ -1,3 +1,15 @@
+#################################################
+# Author: Manasi Paste
+# Course: Cryptography
+# Professor: Dr. Karlsson
+#
+# Description: This program demonstrates encryption
+# and decryption using Vignere cipher. It also demonstrates
+# attack on Vigenere by finding key length
+# Requirements: Numpy, Math and Matplotlib library
+#
+# Run instructions: python vigenere.py
+#################################################
 from math import *
 from frequency import *
 import matplotlib.pyplot as plt

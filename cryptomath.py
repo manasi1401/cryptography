@@ -1,3 +1,24 @@
+#################################################
+# Author: Manasi Paste
+# Course: Cryptography
+# Professor: Dr. Karlsson
+#
+# Description: This program contains functions
+# that are required for encryption and decryption.
+# It contains following functions:
+# 1) GCD
+# 2) Extended GCD
+# 3) Modular Inverse
+# 4) Modular Power
+# 5) Primality Testing
+# 6) Pollard Rho
+# 7) Pollard P-1
+# 8) Fermat's Method
+# 9) Shank's Square Form
+# 10) Modular Square Root
+#
+# Run instructions: run basictest.py to test these functions.
+#################################################
 from math import *
 import random
 

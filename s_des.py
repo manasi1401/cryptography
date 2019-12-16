@@ -1,3 +1,13 @@
+#################################################
+# Author: Manasi Paste
+# Course: Cryptography
+# Professor: Dr. Karlsson
+#
+# Description: This program demonstrates encryption
+# and decryption using simplified DES block cipher.
+#
+# Run instructions: python s_des.py
+#################################################
 # Permutation Tables
 # 1) IP
 IP = [3, 5, 2, 7, 4, 10, 1, 9, 8, 6]

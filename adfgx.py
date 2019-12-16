@@ -1,3 +1,14 @@
+#################################################
+# Author: Manasi Paste
+# Course: Cryptography
+# Professor: Dr. Karlsson
+#
+# Description: This program demonstrates encryption
+# and decryption using ADFGX cipher
+# Requirements: Numpy, Math and Matplotlib library
+#
+# Run instructions: python adfgx.py
+#################################################
 from math import *
 from cryptomath import *
 import numpy as np
