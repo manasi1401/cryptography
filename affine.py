@@ -34,6 +34,14 @@ def get_choice():
 
 
 def encrypt(a, b, pt, n):
+    """
+    Encrypt givenplain text using affine cipher
+    :param a: a from ax+b mod n
+    :param b: b from ax+b mod n
+    :param pt: plain text to be encrypted (no whites space or anyother char the 26 letters
+    :param n: 26
+    :return:
+    """
     cipher = ""
     for c in pt:
         ci = (a*(ord(c) - 65)+b) % n
@@ -42,6 +50,14 @@ def encrypt(a, b, pt, n):
 
 
 def decrypt(a, b, ct, n):
+    """
+    Decrypt given cipher using Affine Cipher
+    :param a: a from a^-1(x-b) mod n
+    :param b: b from a^-1(x-b) mod n
+    :param ct: cipher to be decrypteed
+    :param n: 26
+    :return: decrypted message
+    """
     a_inv = findModInverse(a, n)
     decipherd = ""
     for c in ct:
@@ -73,15 +89,22 @@ def brute_force(cipher, n):
         for j in possible_b:
             print(decrypt(i, j, cipher, n))
 
-a, b = get_ab()
-pt = get_plaintext()
-xi = encrypt(a, b, pt, 26)
-pi = decrypt(a, b, xi, 26)
+
 #freq = analyze(xi)
 #e, t = print_analysis(freq)
 #a1, b1 = attack_affine(e, t, 26)
 #attck = decrypt(a1, b1, xi, 26)
 #brute_force(xi, 26)
-print(xi)
-print(pi)
 
+def main():
+    a, b = get_ab()
+    pt = get_plaintext()
+    print("a inverse: ", findModInverse(a,26))
+    xi = encrypt(a, b, pt, 26)
+    pi = decrypt(a, b, xi, 26)
+    print(xi)
+    print(pi)
+
+
+if __name__== "__main__":
+  main()

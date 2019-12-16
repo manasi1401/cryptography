@@ -172,7 +172,7 @@ def get_round_14(bits, key):
     return left, right, st4L, st4R
 
 
-def differential_cryptanalysis3(first, first_star, key, count):
+def differential_cryptanalysis3(first, first_star, key):
     print(generateKeys(key))
 
     l1,r1,l4,r4 = get_round_14(first, key)
@@ -238,19 +238,19 @@ pairs_s1 =[]
 pairs_s2 =[]
 key_left = []
 key_right = []
-differential_cryptanalysis3(first, first_star, key, 0)
+differential_cryptanalysis3(first, first_star, key)
 first ="11001011"
 first_star ="10101011"
-differential_cryptanalysis3(first, first_star, key, 1)
+differential_cryptanalysis3(first, first_star, key)
 first ="10111011"
 first_star ="10101011"
-differential_cryptanalysis3(first, first_star, key, 2)
+differential_cryptanalysis3(first, first_star, key)
 first ="11001011"
 first_star ="11101011"
-differential_cryptanalysis3(first, first_star, key, 2)
+differential_cryptanalysis3(first, first_star, key)
 first ="10001011"
 first_star ="10111011"
-differential_cryptanalysis3(first, first_star, key, 2)
+differential_cryptanalysis3(first, first_star, key)
 first ="00001011"
 first_star ="11111011"
 differential_cryptanalysis3(first, first_star, key, 2)

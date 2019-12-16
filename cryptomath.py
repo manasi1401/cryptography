@@ -338,6 +338,7 @@ def shanks_Helper(n,k):
         return f
     return 0
 
+
 def ShanksSquareForm(n):
     """
     Find factors of n
@@ -346,7 +347,27 @@ def ShanksSquareForm(n):
     """
     for i in k:
         f = shanks_sq(n,i)
-        print(i)
         if f is not 0:
-            return f, n/f
-    return 1, n
+            return f
+    return n
+
+
+def factorize(n, m):
+    """
+    Lets you choose what method you want to use for factorizing.
+    1 - Fermat's Method
+    2 - Pollard Rho
+    3 - Pollard P-1
+    4 - Shank's Form
+    :param n:
+    :param m:
+    :return:
+    """
+    if m == 1:
+        return fermats_method(n)
+    if m == 2:
+        return pollard_rho(n)
+    if m == 3:
+        return pollard_p_1(n)
+    if m == 4:
+        return ShanksSquareForm(n)

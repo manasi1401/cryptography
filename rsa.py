@@ -3,6 +3,11 @@ import random
 
 
 def generate_keypair():
+    """
+    Generate P and Q random prime. N =PQ. Compute e and d such that
+    a = (a^e)^d mod n
+    :return: e, n, d
+    """
     p = random_prime(10)
     q = random_prime(10)
     # make sure p and q are not same
@@ -25,6 +30,13 @@ def generate_keypair():
 
 
 def encrypt_rsa(publicK, plaintext):
+    """
+    Encrypt every single charachter in the plaintext using RSA
+    cipher = message^e mod n
+    :param publicK: public key (e, n)
+    :param plaintext: input string
+    :return: cipher
+    """
     e, n = publicK
     # make it uppercase
     plaintext = plaintext.upper()
@@ -36,6 +48,13 @@ def encrypt_rsa(publicK, plaintext):
 
 
 def decrypt_rsa(privateK, cipher):
+    """
+    Decrypt the cipher using private key in RSA
+    message = cipher ^d mod n
+    :param privateK: Private key of the user
+    :param cipher: Cipher to be decrypted
+    :return: plaintext
+    """
     d, n = privateK
     plain = ""
     for ch in cipher:
@@ -44,7 +63,12 @@ def decrypt_rsa(privateK, cipher):
 
     return plain
 
-# e, n, d = generate_keypair()
-# print(e, n, d)
-# cipher = encrypt([e, n], "Jonnyhadal i8ttleemap")
-# print(decrypt([d, n], cipher))
+
+def main():
+    e, n, d = generate_keypair()
+    print(e, n, d)
+    cipher = encrypt([e, n], "Jonnyhadal i8ttleemap")
+    print(decrypt([d, n], cipher))
+
+if __name__== "__main__":
+  main()

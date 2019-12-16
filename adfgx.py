@@ -14,6 +14,12 @@ alphaMatrix = "pgcen" \
 
 
 def encrypt(pt, key):
+    """
+    Encrypt text using ADFGX Method.
+    :param pt: Plain text to be encrypted
+    :param key: Key to be used.
+    :return:
+    """
     # string to store substitution cipher
     subs_cipher = ""
     # convert it lower case
@@ -45,6 +51,12 @@ def encrypt(pt, key):
 
 
 def decrypt(cipher, key):
+    """
+    Decrypt the given cipher
+    :param cipher: Cipher to be decrypted
+    :param key: Key to be used
+    :return: message after being decrypted
+    """
     keyLen = len(key)
     # sort just the indexes
     sortedKey = sorted(range(keyLen), key=lambda i: key[i])
