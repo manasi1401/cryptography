@@ -22,6 +22,12 @@ def get_text():
 
 
 def analyze(text):
+    """
+    Construct a 26 length array and increment count
+    as you see a the character in the text
+    :param text: text to be analyzed
+    :return: array with frequencies of 26 letters.
+    """
     freq = np.zeros(26)
 
     for c in text:
@@ -36,6 +42,11 @@ def analyze(text):
 
 
 def print_analysis(freq):
+    """
+    Print and return top two frequencies
+    :param freq: array with frequencies of 26 letters.
+    :return:top two frequency characters.
+    """
     for i in range(26):
         print(chr(i+65), " : ", freq[i])
 
