@@ -1,4 +1,7 @@
 # cryptography
+Language: Python 
+Compiler Python 3.6
+Libraries required: Numpy, Matplotlib and Math
 Files in the Repository:
 1) ADFGX.py: Encrypt and Decrypt using ADFGX cipher (run the script to test)
 2) Affine.py: Encrypt and Decrypt using Affine Cipher, Attacks on Affine (run the script to test)
