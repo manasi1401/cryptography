@@ -6,7 +6,11 @@ import numpy as np
 adfgx = ["A", "D", "F", "G", "X"]
 
 #  size of matrix 5x5
-alphaMatrix = "pgcenbqozrslaftmdviwkuyxh"
+alphaMatrix = "pgcen" \
+              "bqozr" \
+              "slaft" \
+              "mdviw" \
+              "kuyxh"
 
 
 def encrypt(pt, key):
@@ -21,6 +25,8 @@ def encrypt(pt, key):
         # calculating col by modulus 5
         c = alphaMatrix.index(pt[i]) % 5
         subs_cipher += adfgx[r] + adfgx[c]
+        print(pt[i], " : ", adfgx[r] , adfgx[c])
+
 
     # if not even then add X
     if len(subs_cipher) % 2 != 0:
@@ -35,7 +41,6 @@ def encrypt(pt, key):
     for i in sortedKey:
         for j in range(i, s, keyLen):
             cipher += subs_cipher[j]
-
     return cipher
 
 
@@ -67,7 +72,27 @@ def decrypt(cipher, key):
     return message
 
 
-cipher = encrypt("kaiserWilhelm", "RHEIN")
-print("cipher = ", cipher)
-d = decrypt(cipher, "RHEIN")
-print("decrypted = ", d)
+def get_plaintext():
+    str = input("Enter plain text: ")
+    return str.upper()
+
+
+def get_key():
+    """
+    Get the key from the user
+    :return: key converted to upper case
+    """
+    str = input("Enter key: ")
+    return str.upper()
+
+
+def main():
+    str = get_plaintext()
+    key = get_key()
+    cipher = encrypt(str, key)
+    print("cipher = ", cipher)
+    d = decrypt(cipher, key)
+    print("decrypted = ", d)
+
+if __name__== "__main__":
+  main()

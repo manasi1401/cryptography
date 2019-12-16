@@ -1,3 +1,4 @@
+# Permutation Tables from the Cryptography Table
 IP = [58, 50, 42, 34, 26, 18, 10, 2, 60, 52, 44, 36, 28, 20, 12, 4,
       62, 54, 46, 38, 30, 22, 14, 6, 64, 56, 48, 40, 32, 24, 16, 8,
       57, 49, 41, 33, 25, 17, 9, 1, 59, 51, 43, 35, 27, 29, 11, 3,
@@ -33,6 +34,8 @@ Permute32 = [16, 7, 20, 21, 29, 12, 28, 17,
              1, 15, 23, 26, 5, 18, 31, 10,
              2, 8, 24, 14, 32, 27, 3, 9,
              19, 13, 30, 6, 22, 11, 4, 25]
+
+# S Boxes
 s1 = [14, 4, 13, 1, 2, 15, 11, 8, 3, 10, 6, 12, 5, 9, 0, 7,
       0, 15, 7, 4, 14, 2, 13, 1, 10, 6, 12, 11, 9, 5, 3, 8,
       4, 1, 14, 8, 13, 6, 2, 11, 15, 12, 9, 7, 3, 10, 5, 0,
@@ -72,24 +75,37 @@ s8 = [13, 2, 8, 4, 6, 15, 11, 1, 10, 9, 3, 14, 5, 0, 12, 7,
       7, 11, 4, 1, 9, 12, 14, 2, 0, 6, 10, 13, 15, 3, 5, 8,
       2, 1, 14, 7, 4, 10, 8, 13, 15, 12, 9, 0, 3, 5, 6, 11]
 
+# Shifts for Each Key
 shifts = [1, 1, 2, 2, 2, 2, 2, 2, 1, 2, 2, 2, 2, 2, 2, 1]
 S = [s1, s2, s3, s4, s5, s6, s7, s8]
 
-
+# Get binary string of x of length n
 get_bin = lambda x, n: format(x, 'b').zfill(n)
 
 
 def permute(key, perm):
+    """
+    Permute the given string according to the permutation list
+    :param key: String to be permuted
+    :param perm: Order of permutation
+    :return: Permuted bit string
+    """
     p = ""
     for i in perm:
         p += key[i - 1]
     return p
 
-
+## Four Keys are stored in this table
 KEYS = []
 
 
 def round_shift(key_left, key_right):
+    """
+    Rotates two halves of a bit string with 1 place left
+    :param key_left: Left half
+    :param key_right: Right Half
+    :return: Rotated left and right half
+    """
     rotate_left = key_left[1:]
     rotate_left += key_left[:1]
 
@@ -97,9 +113,19 @@ def round_shift(key_left, key_right):
     rotate_right += key_right[:1]
     return rotate_left, rotate_right
 
+
+# Tables to store the rotated halves
 C = []
 D = []
+
+
 def generate_keys(key):
+    """
+    Given an integer key generate 16 sub keys.
+    Stores the sub keys in the KEY table
+    :param key: integer key
+    :return: nothing.
+    """
     key_string = get_bin(key, 64)
     #print(key_string)
     key_56 = permute(key_string, Key56Table)
@@ -126,6 +152,12 @@ def generate_keys(key):
 
 
 def xor(a, b):
+    """
+    Xors two bit strings.
+    :param a: First bit string
+    :param b: Second bit string
+    :return: XORed result
+    """
     result = ""
     for i in range(len(a)):
         if a[i] == b[i]:
@@ -136,6 +168,14 @@ def xor(a, b):
 
 
 def SBox_lookup(bits, table):
+    """
+    Looks up given S Box. The bit string is of length 6.
+    First and last bit give the row number
+    2n,d 3rd, 4th and 5th bits give the column number
+    :param bits: 6 bit string
+    :param table: Sbox that needs to be looked up
+    :return: 4 bit binary string
+    """
     row = int(bits[0] + bits[5], 2)
     col = int(bits[1] + bits[2] + bits[3] + bits[4], 2)
     index = row * 16 + col
@@ -143,6 +183,17 @@ def SBox_lookup(bits, table):
 
 
 def f(right, keyi):
+    """
+    f function which takes the right half and subkey.
+    The right half is expanded to 48 bits and XORed with
+    the sub key. The output is then sliced in to 6 bit strings
+    where each string is an input for S box look up. All the outputs
+    from the S box are combined to form 32 bit string. It is permuted
+    before returned
+    :param right: right half
+    :param keyi: subkey
+    :return: bit string
+    """
     expanded_right = permute(right, EPTable)
     expRXORKey = xor(expanded_right, keyi)
     C = ""
@@ -155,23 +206,44 @@ def f(right, keyi):
 
 
 def F(left, right, keyi):
+    """
+    The left half and output from the f function is
+    XORed and swapped before returning
+    :param left: left half
+    :param right: right half
+    :param keyi: subkey
+    :return: right half, left key
+    """
     left = xor(left, f(right, keyi))
     return right, left
 
 
 def encrypt(pt):
+    """
+    Encrypts given input
+    :param pt: Integer input to be encrypted string.
+    :return: encrypted cipher
+    """
     plaintext = get_bin(pt, 64)
+    # initial permutation
     pt_init_perm = permute(plaintext, IP)
+    # Left and right halves
     left = pt_init_perm[:32]
     right = pt_init_perm[-32:]
+    # 16 rounds
     for i in range(1, 17):
         left, right = F(left, right, KEYS[i])
-
+    # Final Permutation
     cipher = permute(right + left, IPinv)
     return hex(int(cipher, 2))[2:]
 
 
 def decrypt(cipher):
+    """
+    Decrypt a give cipher
+    :param cipher: cipher to be decrypted
+    :return: decrypted message
+    """
     cipher = get_bin(cipher, 64)
     pt_init_perm = permute(cipher, IP)
     left = pt_init_perm[:32]
@@ -183,11 +255,17 @@ def decrypt(cipher):
     return hex(int(plaintext, 2))[2:]
 
 
-key = '133457799BBCDFF1'
-message = '0123456789ABCDEF'
-print("Message: ", message)
-generate_keys(int(key, 16))
-cipher = encrypt(int(message, 16))
-print("Cipher: ",cipher)
-decryptedM = decrypt(int(cipher, 16))
-print("Decrypted Message: ", decryptedM)
+def main():
+    key = '133457799BBCDFF1'
+    message = '0123456789ABCDEF'
+    print("Key: ", key)
+    print("Message: ", message)
+    generate_keys(int(key, 16))
+    print("Generated Keys: ", KEYS)
+    cipher = encrypt(int(message, 16))
+    print("Cipher: ",cipher)
+    decryptedM = decrypt(int(cipher, 16))
+    print("Decrypted Message: ", decryptedM)
+
+if __name__== "__main__":
+  main()

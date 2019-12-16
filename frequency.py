@@ -2,7 +2,7 @@ import numpy as np
 
 
 def get_text():
-    filename = input("Enter filename: ")
+    filename = input("Enter filename from your folder: ")
     f = open(filename, "r")
     text = f.read()
 
@@ -34,6 +34,11 @@ def print_analysis(freq):
     # return freq[sortedFreq[-1]], freq[sortedFreq[-2]], freq[sortedFreq[-3]]
 
 
-#text = get_text()
-#freq = analyze(text)
-#print_analysis(freq)
+def main():
+    text = get_text()
+    freq = analyze(text)
+    print_analysis(freq)
+
+
+if __name__== "__main__":
+  main()

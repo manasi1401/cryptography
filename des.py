@@ -1,6 +1,3 @@
-from sys import exit
-from time import time
-
 
 initPerm = [3, 5, 2, 7, 4, 10, 1, 9, 8, 6]
 perm8 =[6, 3, 7, 4, 8, 5, 10, 9]
