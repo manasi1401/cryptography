@@ -243,6 +243,84 @@ def decryptText(c, key):
     return pt
 
 
+def get_round_14(bits, key):
+    """
+    Take L1R1 and complete the rest 3 rounds
+    :param bits: L1R1
+    :param key: Key
+    :return: L1, R1, L4, R4
+    """
+    left = bits[:4]
+    right = bits[-4:]
+    KEYS = generateKeys(key)
+
+    # Round 1
+    #st1L, st1R = feistal(left, right, keyOne)
+    # Round 2
+    st2L, st2R = feistal(left, right, KEYS[1])
+    # Round 3
+    st3L, st3R = feistal(st2L, st2R, KEYS[2])
+    # Round 4
+    st4L, st4R = feistal(st3L, st3R, KEYS[3])
+
+    return left, right, st4L, st4R
+
+
+def differential_cryptanalysis(str, str_star, key):
+    """
+    Differential analysis of simplified DES
+    :param str: L1R1
+    :param str_star:L1*R1*
+    :param key: Key
+    :return:
+    """
+    l1, r1, l4, r4 = get_round_14(str, key)
+    l1_s, r1_s, l4_s, r4_s = get_round_14(str_star, key)
+    print(r4, r4_s)
+    l1_diff = xor(l1, l1_s)
+    r1_diff = xor(r1, r1_s)
+    l4_diff = xor(l4, l4_s)
+    r4_diff = xor(r4, r4_s)
+    # r4' xor l1'
+    r4l1d = xor(r4_diff, l1_diff)
+    # E(l4')
+    el4d = permute(l4_diff, EP)
+    # Sbox 1 input
+    s1_input = el4d[:4]
+    # Sbox 1 output
+    s1_output = r4l1d[:3]
+    # Sbox 2 input
+    s2_input = el4d[-4:]
+    # Sbox 2 output
+    s2_output = r4l1d[-3:]
+    # contain possible K4L
+    pairs_s1 =[]
+    # find pairs s1
+    for i in range(0, 16):
+        for j in range(0, 16):
+            x = get_bin(i, 4)
+            y = get_bin(j, 4)
+            if xor(x, y) == s1_input:
+                s1_x = look_up_stable(x, s1)
+                s1_y = look_up_stable(y, s1)
+                if xor(s1_x, s1_y) == s1_output:
+                    pairs_s1.append(xor(x, el4_left))
+
+    # contain possible K4R
+    pairs_s2 = []
+    # find pairs s2
+    for i in range(0, 16):
+        for j in range(0, 16):
+            x = get_bin(i, 4)
+            y = get_bin(j, 4)
+            if xor(x, y) == s2_input:
+                s2_x = look_up_stable(x, s2)
+                s2_y = look_up_stable(y, s2)
+                if xor(s2_x, s2_y) == s2_output:
+                    pairs_s2.append(xor(y, el4_right))
+
+    # needs to be completed...
+
 def main():
     key = 1000
     message = 123
@@ -257,6 +335,8 @@ def main():
     print("Decrypting...")
     decryptedM = decrypt_des(cipher, KEYS)
     print("Decrypted Message: ", decryptedM)
-
+    #first = "11001011"
+    #first_star = "10101011"
+    #differential_cryptanalysis(first, first_star, key)
 if __name__== "__main__":
   main()

@@ -102,11 +102,13 @@ def brute_force(cipher, n):
             print(decrypt(i, j, cipher, n))
 
 
-#freq = analyze(xi)
-#e, t = print_analysis(freq)
-#a1, b1 = attack_affine(e, t, 26)
-#attck = decrypt(a1, b1, xi, 26)
-#brute_force(xi, 26)
+def freq_attack(xi):
+    freq = analyze(xi)
+    e, t = print_analysis(freq)
+    a1, b1 = attack_affine(e, t, 26)
+    attck = decrypt(a1, b1, xi, 26)
+    print(attck)
+
 
 def main():
     a, b = get_ab()
@@ -116,6 +118,9 @@ def main():
     pi = decrypt(a, b, xi, 26)
     print(xi)
     print(pi)
+    print("Warning: For Frequency attack you need a large amount of data(may not work): ")
+    freq_attack(xi)
+    brute_force(xi, 26)
 
 
 if __name__== "__main__":
